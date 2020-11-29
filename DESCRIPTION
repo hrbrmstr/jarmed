@@ -1,24 +1,31 @@
 Package: jarmed
 Type: Package
-Title: jarmed title goes here otherwise CRAN checks fail
+Title: Fingerprint TLS Servers with Salesforece JARM Algorithm
 Version: 0.1.0
 Date: 2020-11-29
 Authors@R: c(
     person("Bob", "Rudis", email = "bob@rud.is", role = c("aut", "cre"), 
-           comment = c(ORCID = "0000-0001-5670-2640"))
+           comment = c(ORCID = "0000-0001-5670-2640")),
+    person("Salesforce", role = "aut",
+           comment = "JARM Python library; BSD-3; <https://github.com/salesforce/jarm>")
   )
 Maintainer: Bob Rudis <bob@rud.is>
-Description: A good description goes here otherwise CRAN checks fail.
+Description: The Salesforce JARM Tool <https://github.com/salesforce/jarm> is an 
+    active Transport Layer Security (TLS) server fingerprinting tool. JARM 
+    fingerprints can be used to quickly verify that all servers in a group have 
+    the same TLS configuration; group disparate servers on the internet by configuration, 
+    identifying that a server may belong to Google vs. Salesforce vs. Apple, for example; 
+    Identify default applications or infrastructure; and/or Identify malware command and 
+    control infrastructure and other malicious servers on the Internet. Tools
+    are provided to generate JARM fingerprints.
 URL: https://git.rud.is/hrbrmstr/jarmed
 BugReports: https://git.rud.is/hrbrmstr/jarmed/issues
 Encoding: UTF-8
-License: AGPL
+License: BSD_3_clause + file LICENSE
 Suggests: 
     covr, tinytest
 Depends: 
-    R (>= 3.5.0)
-Imports: 
-    httr,
-    jsonlite
+    R (>= 3.6.0),
+    reticulate
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1

@@ -39,6 +39,26 @@ packageVersion("jarmed")
 
 ```
 
+```{r ex-01}
+
+(res <- jarm_fingerprint("rud.is"))
+
+str(res, 1)
+```
+
+```{r ex-02}
+library(tidyverse)
+
+c(
+  "rud.is",
+  "r-project.org",
+  "rstudio.com",
+  "apple.com"
+) -> sites
+
+sites %>% 
+  map_df(jarm_fingerprint)
+```
 ## jarmed Metrics
 
 ```{r cloc, echo=FALSE}
@@ -47,5 +67,4 @@ cloc::cloc_pkg_md()
 
 ## Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct. 
-By participating in this project you agree to abide by its terms.
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
