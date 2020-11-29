@@ -232,9 +232,10 @@ def supported_versions(jarm_details, grease):
     return ext
 
 #Send the assembled client hello using a socket
-def send_packet(destination_host, destination_port, packet):
+def send_packet(destination_host, destination_port, packet, timeout = 20):
     try:
         #Determine if the input is an IP or domain name
+        raw_ip = False
         try:
             if (type(ipaddress.ip_address(destination_host)) == ipaddress.IPv4Address) or (type(ipaddress.ip_address(destination_host)) == ipaddress.IPv6Address):
                 raw_ip = True
@@ -245,13 +246,11 @@ def send_packet(destination_host, destination_port, packet):
         #Connect the socket
         if ":" in destination_host:
             sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-            #Timeout of 20 seconds
-            sock.settimeout(20)
+            sock.settimeout(timeout)
             sock.connect((destination_host, destination_port, 0, 0))
         else:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #Timeout of 20 seconds
-            sock.settimeout(20)
+            sock.settimeout(timeout)
             sock.connect((destination_host, destination_port))
         #Resolve IP if given a domain name
         if raw_ip == False:
@@ -436,9 +435,11 @@ def jarm_query(destination_host, destination_port):
     jarm = ""
     #Assemble, send, and decipher each packet
     iterate = 0
+    ips = []
     while iterate < len(queue):
         payload = packet_building(queue[iterate])
         server_hello, ip = send_packet(destination_host, destination_port, payload)
+        ips.append(ip)
         #Deal with timeout error
         if server_hello == "TIMEOUT":
             jarm = "|||,|||,|||,|||,|||,|||,|||,|||,|||,|||"
@@ -452,5 +453,6 @@ def jarm_query(destination_host, destination_port):
             jarm += ","
     #Fuzzy hash
     result = jarm_hash(jarm)
+    ips = [ ip for ip in list(set(ips)) if ip ]
 
-    return({ "host" : destination_host, "port" : destination_port, "ip": ip, "result" : result, "jarm" : jarm })
+    return({ "host" : destination_host, "port" : destination_port, "ip": ips, "result" : result, "jarm" : jarm })
